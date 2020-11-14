@@ -510,8 +510,7 @@
               </v-card-title>
               <div>
                 <VueFileAgent
-                  :uploadUrl="uploadUrl"
-                  v-model="fileName"
+                  v-model="files"
                   :multiple="false"
                   :deletable="true"
                   helpText="Drop image here or browse"
@@ -529,6 +528,7 @@
 <script>
 import Vue from 'vue'
 import VueFileAgent from 'vue-file-agent'
+import axios from 'axios'
 // eslint-disable-next-line no-unused-vars
 import VueFileAgentStyles from 'vue-file-agent/dist/vue-file-agent.css'
 
@@ -550,10 +550,23 @@ export default {
       window.particlesJS('particles-js', {})
     },
     uploadFile () {
-
+      let formData = new FormData()
+      console.log(this.files)
+      console.log(this.files[0])
+      formData.append('file', this.files[0].file)
+      axios.post('api/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+      ).then(function (response) {
+        console.log(response)
+      }).catch(function (error) {
+        console.log(error)
+      })
     },
     fileDeleted () {
-      this.fileName = ''
+      this.files = []
       this.submitBtnDisabled = true
     },
     fileSelected () {
@@ -564,7 +577,7 @@ export default {
     return {
       uploadUrl: 'https://example.com',
       isDark: true,
-      fileName: '',
+      files: [],
       submitBtnDisabled: true,
       particlesKey: 0
     }
