@@ -1,11 +1,13 @@
 import io
 import os
-from flask import Flask, render_template, request, jsonify
-from werkzeug.utils import secure_filename
-import requests
 
+from PIL import Image
+from flask import Flask, render_template, request
+from werkzeug.utils import secure_filename
+from Segmenter import Segmenter
 
 app = Flask(__name__, static_folder="tempDir")
+segmenter = Segmenter()
 
 
 @app.route('/')
@@ -17,15 +19,17 @@ def hello_world():
 def upload_file():
     if request.method == 'POST':
         f = request.files['file']
-        file_name = secure_filename(f.filename)
+        img_name = secure_filename(f.filename)
         dirName = 'tempDir'
+        img_path = os.path.join(dirName, img_name)
         if not os.path.exists(dirName):
             os.mkdir(dirName)
-        f.save(os.path.join(dirName, file_name))
+        f.save(img_path)
 
-        # code here
+        img = Image.open(img_path)
+        segmap, id_to_class = segmenter.predict_on_image(img)
 
-        return render_template()
+        return render_template('results.html', file_name=img_name, file_path=img_path)
 
 
 if __name__ == '__main__':
