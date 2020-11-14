@@ -1,15 +1,38 @@
-# CodeJam2020
-Generic description here
+##### Template and Dependencies
 
-## How to start server
+* Clone this repository:
 
-1) `virtualenv venv` (optional)
-2) If on Windows run `venv\Scripts\activate.bat`, else on Linux `source venv/bin/activate` (optional)
-3) `pip install -r requirements.txt`
-4) `python run.py` and the server will be serving on http://127.0.0.1:5000/
+	```
+	$ git clone https://github.com/joeyzhou98/codejam2020.git
+	```
 
-## TEAM MEMBERS:
-+ Nigel Yong
-+ Joey Zhou
-+ Rhina Kim
-+ Sonam
+* Setup virtual environment, install dependencies, and activate it:
+
+	```
+	$ pipenv install --dev
+	$ pipenv shell
+	```
+
+* Install JS dependencies
+
+	```
+	$ npm install
+	```
+
+
+## Development Server
+
+Run Flask Api development server:
+
+```
+$ python run.py
+```
+
+From another tab in the same directory, start the webpack dev server:
+
+```
+$ npm run serve
+```
+
+The Vuejs application will be served from `localhost:8080` and the Flask Api
+and static files will be served from `localhost:5000`.
