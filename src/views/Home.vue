@@ -25,12 +25,12 @@
         <span>View source</span>
       </v-tooltip>
     </v-toolbar>
-    <Particles id="tsparticles"
+    <Particles :key="particlesKey" id="tsparticles"
       :options='{
   "autoPlay": true,
   "background": {
     "color": {
-      "value": "#000000"
+      "value": isDark ? "#000000" : "#cccccc"
     },
     "image": "",
     "position": "",
@@ -541,6 +541,7 @@ export default {
   methods: {
     changeTheme () {
       this.isDark = !this.isDark
+      this.particlesKey += 1
     },
     openSource () {
       window.open('https://github.com/joeyzhou98/codejam2020', '_blank')
@@ -564,7 +565,8 @@ export default {
       uploadUrl: 'https://example.com',
       isDark: true,
       fileName: '',
-      submitBtnDisabled: true
+      submitBtnDisabled: true,
+      particlesKey: 0
     }
   },
   mounted () {
