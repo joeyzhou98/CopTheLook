@@ -140,7 +140,8 @@ def display_image(img, segmap):
     segmap = np.array(segmap)
     ia_seg_map = ia.SegmentationMapOnImage(segmap, shape=img.shape, nb_classes=47)
     colors = ia_seg_map.DEFAULT_SEGMENT_COLORS + ia_seg_map.DEFAULT_SEGMENT_COLORS[1:6]
-    return Image.fromarray(ia_seg_map.draw_on_image(img, colors=colors))
+    result = ia_seg_map.draw_on_image(img, colors=colors)
+    return Image.fromarray(result[0])
 
 
 '''
