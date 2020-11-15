@@ -8,6 +8,11 @@ import vuetify from './plugins/vuetify'
 
 Vue.config.productionTip = false
 
+// const baseURL = 'http://localhost:5000';
+// if (typeof baseURL !== 'undefined') {
+//   Vue.axios.defaults.baseURL = baseURL;
+// }
+
 new Vue({
   router,
   store,

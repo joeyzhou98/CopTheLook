@@ -6,6 +6,7 @@ import Api from './views/Api.vue'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',

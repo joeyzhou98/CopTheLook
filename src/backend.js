@@ -1,9 +1,9 @@
 import axios from 'axios'
 
 let $axios = axios.create({
-  baseURL: '/api/',
+  baseURL: 'http://localhost:5000/api/',
   timeout: 5000,
-  headers: {'Content-Type': 'application/json'}
+  headers: { 'Content-Type': 'application/json' }
 })
 
 // Request Interceptor
@@ -30,6 +30,16 @@ export default {
 
   fetchSecureResource () {
     return $axios.get(`secure-resource/zzz`)
+      .then(response => response.data)
+  },
+
+  reverseImage (path) {
+    return $axios.get(`/reverse-image/` + path)
+      .then(response => response.data)
+  },
+
+  reverseUri (url) {
+    return $axios.get(`/reverse-uri/` + url)
       .then(response => response.data)
   }
 }
