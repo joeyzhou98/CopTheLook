@@ -187,7 +187,7 @@ def get_cropped_segments(img):
                                   indexing='ij')
             sub_image = img_array[indices]
 
-            if (sub_image.shape[0] > total_x / count) or (sub_image.shape[1] > total_y / count):
+            if (sub_image.shape[0] > total_x / count) and (sub_image.shape[1] > total_y / count):
                 img = Image.fromarray(sub_image, 'RGB')
                 img_byte_arr = io.BytesIO()
                 img.save(img_byte_arr, format='PNG')

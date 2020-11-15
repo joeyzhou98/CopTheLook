@@ -58,7 +58,7 @@
     <div>
       <v-row justify="center">
         <v-col cols="12" sm="8">
-          <v-card v-if="notSearched" :dark="isDark" :loading="loading" elevation="16" max-width="800" class="mx-auto">
+          <v-card height="100%" v-if="notSearched" :dark="isDark" :loading="loading" elevation="16" class="mx-auto">
             <v-card-title>
               <span class="headline" :class="{'black--text': !isDark, 'white--text': isDark}">What kind of style would you like to explore today?</span>
               <v-spacer></v-spacer>
@@ -66,7 +66,7 @@
                 <template v-slot:activator="{ on, attrs }">
                   <div v-bind="attrs" v-on="on">
                     <v-btn :loading="loading" :color="isDark ? 'grey darken-3' : 'grey lighten-3'" :disabled="submitBtnDisabled" @click="uploadFile"
-                      >Upload</v-btn
+                      >Search</v-btn
                     >
                   </div>
                 </template>
@@ -76,8 +76,10 @@
             </v-card-title>
             <div>
               <VueFileAgent
+                :disabled="loading"
                 v-model="files"
                 :multiple="false"
+                :editable="true"
                 :deletable="true"
                 helpText="Drop image here or browse"
                 @delete="fileDeleted"
