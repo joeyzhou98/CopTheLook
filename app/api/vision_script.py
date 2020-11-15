@@ -1,12 +1,5 @@
-
-import requests
-from bs4 import BeautifulSoup
-from selenium import webdriver
 from google.cloud import vision
-import io
 import os
-import pandas
-from os import path
 
 
 # set path to api key here
