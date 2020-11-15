@@ -47,10 +47,10 @@ class UploadFile(Resource):
         pixels = img.size[0] * img.size[1]
         w, h = img.size[0], img.size[1]
         while pixels > limit:
-            h //= 2
-            w //= 2
+            h *= 0.9
+            w *= 0.9
             pixels = h * w
-        img.resize((h, w), PIL.Image.ANTIALIAS)
+        img.thumbnail((int(h), int(w)), PIL.Image.ANTIALIAS)
         filename = secure_filename(file.filename)
         extension = filename.split('.')[1]
         temp_folder_path = os.path.join(root_dir, 'temp')
