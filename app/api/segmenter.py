@@ -1,10 +1,11 @@
+import io
 import json
 import base64
 import numpy as np
 import pandas as pd
+import requests
 from PIL import Image
 import imgaug as ia
-import matplotlib.pyplot as plt
 from vision_script import *
 
 # Mapping of class ids with class names
