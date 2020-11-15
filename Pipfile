@@ -17,7 +17,7 @@ pandas = "*"
 numpy = "*"
 pillow = "*"
 imgaug = "*"
-opencv-python = "==4.2.0.34"
+opencv-python-headless = "*"
 
 [dev-packages]
 pytest = "*"
