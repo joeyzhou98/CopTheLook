@@ -6,6 +6,7 @@ import os
 import uuid
 from datetime import datetime
 
+import PIL
 from PIL import Image
 from flask import request, jsonify, send_from_directory, url_for
 from flask_restx import Resource
@@ -42,6 +43,14 @@ class UploadFile(Resource):
 
         root_dir = os.getcwd()
         img = Image.open(file)
+        limit = 400000
+        pixels = img.size[0] * img.size[1]
+        w, h = img.size[0], img.size[1]
+        while pixels > limit:
+            h //= 2
+            w //= 2
+            pixels = h * w
+        img.resize((h, w), PIL.Image.ANTIALIAS)
         filename = secure_filename(file.filename)
         extension = filename.split('.')[1]
         temp_folder_path = os.path.join(root_dir, 'temp')
