@@ -26,5 +26,4 @@ selenium-debug.log
 *security_backend.py
 
 venv/
-g_credentials.json
 temp/
