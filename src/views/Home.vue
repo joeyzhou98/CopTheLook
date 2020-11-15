@@ -60,7 +60,7 @@
         <v-col cols="12" sm="8">
           <v-card height="100%" v-if="notSearched" :dark="isDark" :loading="loading" elevation="16" class="mx-auto">
             <v-card-title>
-              <span class="headline" :class="{'black--text': !isDark, 'white--text': isDark}">What kind of style would you like to explore today?</span>
+              <span class="headline" :class="{'black--text': !isDark, 'white--text': isDark}">What style would you like to explore today?</span>
               <v-spacer></v-spacer>
               <v-tooltip right>
                 <template v-slot:activator="{ on, attrs }">
@@ -104,7 +104,7 @@
                 :class-name="segment.class"
                 :img-name="segment.img_name"
                 :urls="segment.urls"
-                :color="'#'+(Math.random()*0xFFFFFF<<0).toString(16)"
+                :color="isDark ? '#b4b4b4' : '#EEEEEE'"
               ></Class>
             </v-row>
           </v-container>
