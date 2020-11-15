@@ -16,9 +16,6 @@ google-cloud-vision = "*"
 pandas = "*"
 numpy = "*"
 pillow = "*"
-imgaug = "*"
-scikit-build = "*"
-opencv-python = "*"
 
 [dev-packages]
 pytest = "*"
