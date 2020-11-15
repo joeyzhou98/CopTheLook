@@ -1,11 +1,10 @@
 import json
-import requests
-import io
 import base64
 import numpy as np
 import pandas as pd
 from PIL import Image
 import imgaug as ia
+import matplotlib.pyplot as plt
 from vision_script import *
 
 # Mapping of class ids with class names
@@ -145,7 +144,7 @@ def display_image(img, segmap):
 
 
 def get_cropped_segments(img):
-
+    cropped_results = []
     segmenter = Segmenter()
     # you can test with image_url below
     # img_url = "https://upload.wikimedia.org/wikipedia/commons/5/5a/Batik_Fashion_01.jpg" 
@@ -158,54 +157,53 @@ def get_cropped_segments(img):
     count = 0
     total_x = 0
     total_y = 0
-    cropped_images = []
 
     for id in id_to_class:
-      id_segmap = np.copy(segmap)
-      mask = (segmap == int(id))
-      id_segmap *= mask
-      i, j = np.where(id_segmap)
+        id_segmap = np.copy(segmap)
+        mask = (segmap == int(id))
+        id_segmap *= mask
+        i, j = np.where(id_segmap)
 
-    if i.size>0 or j.size >0 :
-        indices = np.meshgrid(np.arange(min(i), max(i) + 1),
-                            np.arange(min(j), max(j) + 1),
-                            indexing='ij')
-        sub_image = img_array[indices]
-        count+=1
-        total_x += sub_image.shape[0]
-        total_y += sub_image.shape[1]
+        if i.size > 0 or j.size > 0:
+            indices = np.meshgrid(np.arange(min(i), max(i) + 1),
+                                  np.arange(min(j), max(j) + 1),
+                                  indexing='ij')
+            sub_image = img_array[indices]
+            count += 1
+            total_x += sub_image.shape[0]
+            total_y += sub_image.shape[1]
 
-    print('average_x:', total_x/count, '\n average_y:', total_y/count)
+    print('average_x:', total_x / count, '\n average_y:', total_y / count)
 
     for id in id_to_class:
-      id_segmap = np.copy(segmap)
-      mask = (segmap == int(id))
-      id_segmap *= mask
-      i, j = np.where(id_segmap)
+        id_segmap = np.copy(segmap)
+        mask = (segmap == int(id))
+        id_segmap *= mask
+        i, j = np.where(id_segmap)
 
-    if i.size>0 or j.size >0 :
-    # then code for cropping the img
-        indices = np.meshgrid(np.arange(min(i), max(i) + 1),
-                            np.arange(min(j), max(j) + 1),
-                            indexing='ij')
-        sub_image = img_array[indices]
+        if i.size > 0 or j.size > 0:
+            # then code for cropping the img
+            indices = np.meshgrid(np.arange(min(i), max(i) + 1),
+                                  np.arange(min(j), max(j) + 1),
+                                  indexing='ij')
+            sub_image = img_array[indices]
 
-        if (sub_image.shape[0] > total_x/count) or (sub_image.shape[1] > total_y/count) :
-          plt.figure()
-          plt.imshow(sub_image)
-          cropped_images.append(sub_image)
+            if (sub_image.shape[0] > total_x / count) or (sub_image.shape[1] > total_y / count):
+                img = Image.fromarray(sub_image, 'RGB')
+                img_byte_arr = io.BytesIO()
+                img.save(img_byte_arr, format='PNG')
+                img_byte_arr = img_byte_arr.getvalue()
+                urls = best_match_uploaded_img(img_byte_arr)
 
-    from PIL import Image
-
-
-    cropped_results = []
-
-    for image in cropped_images:
-        img = Image.fromarray(image, 'RGB')
-        result = best_match_uploaded_img(img)
-        cropped_results.append(result)
+                cropped_results.append({
+                    'class': id_to_class[id],
+                    'image_object': img,
+                    'urls': urls
+                })
 
     return cropped_results
+
+
 '''
 Usage:
 

@@ -1,9 +1,9 @@
 <template>
-  <div style="height: 100%">
+  <div :style="{background: isDark ? '#424242' : '#EEEEEE'}" style="height: 100%">
     <v-toolbar :dark="isDark">
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-      <v-toolbar-title>Title</v-toolbar-title>
+      <v-toolbar-title>ShopTheLook</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -28,14 +28,14 @@
     <div>
       <v-row justify="center">
         <v-col cols="12" sm="8">
-          <v-card max-width="800" class="mx-auto">
-            <v-card-title class="blue darken-1">
-              <span class="headline white--text">Fashion Shopping Helper</span>
+          <v-card :dark="isDark" :loading="loading" elevation="16" max-width="800" class="mx-auto">
+            <v-card-title>
+              <span class="headline" :class="{'black--text': !isDark, 'white--text': isDark}">What kind of style would you like to explore today?</span>
               <v-spacer></v-spacer>
               <v-tooltip right>
                 <template v-slot:activator="{ on, attrs }">
                   <div v-bind="attrs" v-on="on">
-                    <v-btn :disabled="submitBtnDisabled" @click="uploadFile"
+                    <v-btn :loading="loading" :color="isDark ? 'grey darken-3' : 'grey lighten-3'" :disabled="submitBtnDisabled" @click="uploadFile"
                       >Upload</v-btn
                     >
                   </div>
@@ -56,9 +56,18 @@
             </div>
           </v-card>
 
-          <div v-if="this.resources[0]">
-            <p>{{resources}}</p>
-          </div>
+          <v-container>
+            <v-row dense>
+              <Class
+                v-for="segment in segments"
+                :key="segment.class"
+                :class-name="segment.class"
+                :img-name="segment.img_name"
+                :urls="segment.urls"
+                :color="'#'+(Math.random()*0xFFFFFF<<0).toString(16)"
+              ></Class>
+            </v-row>
+          </v-container>
         </v-col>
       </v-row>
     </div>
@@ -69,49 +78,30 @@
 import Vue from 'vue'
 import VueFileAgent from 'vue-file-agent'
 import axios from 'axios'
+import Class from '../components/Class'
 // eslint-disable-next-line no-unused-vars
 import VueFileAgentStyles from 'vue-file-agent/dist/vue-file-agent.css'
-import $backend from '../backend'
 
 Vue.use(VueFileAgent)
 
 export default {
   name: 'home',
-  components: {},
+  components: { 'Class': Class },
   data () {
     return {
-      resources: [],
+      mainPicture: '',
+      segments: [],
       error: '',
       isDark: true,
       files: [],
       submitBtnDisabled: true,
       particlesKey: 0,
-      fileName: 'ss'
+      loading: false
     }
   },
   methods: {
-    fetchResource () {
-      $backend
-        .fetchResource()
-        .then((responseData) => {
-          this.resources.push(responseData)
-        })
-        .catch((error) => {
-          this.error = error.message
-        })
-    },
-    fetchSecureResource () {
-      $backend
-        .fetchSecureResource()
-        .then((responseData) => {
-          this.resources.push(responseData)
-        })
-        .catch((error) => {
-          this.error = error.message
-        })
-    },
     changeTheme () {
-      // this.isDark = !this.isDark
+      this.isDark = !this.isDark
       // this.particlesKey += 1
     },
     openSource () {
@@ -120,30 +110,26 @@ export default {
     initParticles () {
       // window.particlesJS('particles-js', {})
     },
-    uploadFile () {
+    async uploadFile () {
+      this.loading = true
       let formData = new FormData()
       formData.append('file', this.files[0].file)
 
-      axios
+      await axios
         .post('api/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         })
         .then((response) => {
-          // $backend
-          //   .reverseImage(response.data)
-          //   .then((responseData) => {
-          //     this.resources.push(responseData);
-          //   })
-          //   .catch((error) => {
-          //     this.error = error.message;
-          //   });
-          this.resources.push(response)
+          const data = response.data
+          this.mainPicture = data.main_img_name
+          this.segments = data.segments
         })
         .catch(function (error) {
           this.error = error.message
         })
+      this.loading = false
     },
     fileDeleted () {
       this.files = []
@@ -151,28 +137,6 @@ export default {
     },
     fileSelected () {
       this.submitBtnDisabled = false
-    },
-    reverseImage (path) {
-      $backend
-        .reverseImage(path)
-        .then((responseData) => {
-          this.resources.push(responseData)
-          console.log(this.resources)
-        })
-        .catch((error) => {
-          this.error = error.message
-        })
-    },
-    reverseUri (url) {
-      $backend
-        .reverseUri(url)
-        .then((responseData) => {
-          this.resources.push(responseData)
-          console.log(this.resources)
-        })
-        .catch((error) => {
-          this.error = error.message
-        })
     }
   },
   mounted () {

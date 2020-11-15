@@ -1,3 +1,4 @@
+from typing import List
 
 import requests
 from bs4 import BeautifulSoup
@@ -35,10 +36,10 @@ def best_match_uri(uri):
 
     return result
 
+
 def best_match_uploaded_img(img):
     """Detects web annotations given an image."""
     from google.cloud import vision
-    import io
     client = vision.ImageAnnotatorClient()
 
     # with io.open(path, 'rb') as image_file:
@@ -49,14 +50,13 @@ def best_match_uploaded_img(img):
     response = client.web_detection(image=image)
     annotations = response.web_detection
 
-    best_web_entity = annotations.web_entities[0]
-    best_matching_pages = annotations.pages_with_matching_images[0]
+    urls: List[str] = []
+    if annotations.pages_with_matching_images:
+        urls.extend([page.url for page in annotations.pages_with_matching_images])
+    if annotations.visually_similar_images:
+        urls.extend([image.url for image in annotations.visually_similar_images])
 
-    result = {}
-    result['best_web_entity'] = best_web_entity
-    result['best_matching_pages'] = annotations.pages_with_matching_images
-
-    return result
+    return urls
 
 
 # best_web_entity = best_match_uri(uri)['best_web_entity']

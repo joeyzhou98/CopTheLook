@@ -26,4 +26,5 @@ selenium-debug.log
 *security_backend.py
 
 venv/
-app/upload
+g_credentials.json
+temp/
