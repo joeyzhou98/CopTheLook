@@ -17,6 +17,8 @@ google-api-python-client = "*"
 google-cloud-vision = "*"
 pandas = "*"
 numpy = "*"
+pillow = "*"
+imgaug = "*"
 
 [dev-packages]
 pytest = "*"

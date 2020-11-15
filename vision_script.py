@@ -10,7 +10,7 @@ from os import path
 
 # set path to api key here
 """ INPUT PATH TO JSON API KEY"""
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=""
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="g_credentials.json"
 
 uri = "https://media.endclothing.com/media/catalog/product/0/6/06-12-2017_adidas_ultraboost_coreblack_bb6166_mg_1.jpg"
 uri2 = "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/gsuin11ptg5qgktmzoat/air-force-1-07-shoe-KyTDGepj.jpg"
@@ -59,16 +59,16 @@ def best_match_uploaded_img(img):
     return result
 
 
-best_web_entity = best_match_uri(uri)['best_web_entity']
-best_matching_pages = best_match_uri(uri)['best_matching_pages']
+# best_web_entity = best_match_uri(uri)['best_web_entity']
+# best_matching_pages = best_match_uri(uri)['best_matching_pages']
 
-print("The product is " , best_web_entity.description , " with a score of " , best_web_entity.score)
+# print("The product is " , best_web_entity.description , " with a score of " , best_web_entity.score)
 
-print("You can find it here ", best_matching_pages[0].url)
+# print("You can find it here ", best_matching_pages[0].url)
 
-print("\nIf that was not the exact product, here are" , str(len(best_matching_pages)) ," additional searches:\n")
-for item in best_matching_pages:
-    print('\n' , item.page_title, ':' , item.url, '\n')
+# print("\nIf that was not the exact product, here are" , str(len(best_matching_pages)) ," additional searches:\n")
+# for item in best_matching_pages:
+#     print('\n' , item.page_title, ':' , item.url, '\n')
 
 
 

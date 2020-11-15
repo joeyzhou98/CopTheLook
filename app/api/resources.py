@@ -14,8 +14,7 @@ from .security import require_auth
 from . import api_rest
 from google.protobuf.json_format import MessageToJson
 import proto
-from io import BytesIO
-
+from .segmenter import get_cropped_segments
 
 class SecureResource(Resource):
     """ Calls require_auth decorator on all requests """
@@ -51,7 +50,9 @@ class UploadFile(Resource):
         
         # files={"file": request.files["file"]}
 
-        return ReverseImage.get(self, file.read())
+
+
+        return Segment.get(self, file.read())
 
 @api_rest.route('/reverse-image/<string:img>')
 class ReverseImage(SecureResource):
@@ -89,4 +90,15 @@ class ReverseUri(SecureResource):
 
     def get(self, url):
         result = best_match_uri(url)
+        return make_response(jsonify(result))
+
+@api_rest.route('/segment/<string:image>')
+class Segment(SecureResource):
+    """ Unsecure Resource Class: Inherit from Resource """
+
+    def get(self, image):
+        result = get_cropped_segments(image)
+
+        print(result)
+
         return make_response(jsonify(result))
