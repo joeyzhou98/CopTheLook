@@ -170,7 +170,9 @@ export default {
           this.notSearched = false
         })
         .catch(function (error) {
-          this.error = error.message
+          if (error.response) {
+            this.error = error.response.data
+          } else { this.error = 'uh oh, an error happened...' }
           this.loading = false
           this.snackbar = true
         })

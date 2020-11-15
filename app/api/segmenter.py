@@ -158,6 +158,8 @@ def get_cropped_segments(img):
     total_y = 0
 
     for id in id_to_class:
+        if int(id) > 27:
+            break
         id_segmap = np.copy(segmap)
         mask = (segmap == int(id))
         id_segmap *= mask
@@ -175,6 +177,8 @@ def get_cropped_segments(img):
     print('average_x:', total_x / count, '\n average_y:', total_y / count)
 
     for id in id_to_class:
+        if int(id) > 27:
+            break
         id_segmap = np.copy(segmap)
         mask = (segmap == int(id))
         id_segmap *= mask
@@ -187,7 +191,7 @@ def get_cropped_segments(img):
                                   indexing='ij')
             sub_image = img_array[indices]
 
-            if (sub_image.shape[0] > total_x / count) and (sub_image.shape[1] > total_y / count):
+            if (sub_image.shape[0] > total_x / count) or (sub_image.shape[1] > total_y / count):
                 img = Image.fromarray(sub_image, 'RGB')
                 img_byte_arr = io.BytesIO()
                 img.save(img_byte_arr, format='PNG')
