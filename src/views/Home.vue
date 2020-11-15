@@ -132,7 +132,7 @@ export default {
       mainPicture: '',
       segments: [],
       error: '',
-      isDark: true,
+      isDark: false,
       files: [],
       submitBtnDisabled: true,
       particlesKey: 0,
