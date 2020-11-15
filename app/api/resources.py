@@ -14,6 +14,7 @@ from .security import require_auth
 from . import api_rest
 from google.protobuf.json_format import MessageToJson
 import proto
+from io import BytesIO
 
 
 class SecureResource(Resource):
@@ -39,21 +40,27 @@ class UploadFile(Resource):
         if file.filename == '':
             return 'No selected file', 400
 
-        filename = secure_filename(file.filename)
-        if not os.path.isdir('app/upload'):
-            os.mkdir('app/upload')
-        file_path = os.path.join('app/upload', filename)
-        file.save(file_path)
-        send_file(os.path.join('upload', filename), mimetype='image')
+        # filename = secure_filename(file.filename)
+        # if not os.path.isdir('app/upload'):
+        #     os.mkdir('app/upload')
+        # file_path = os.path.join('app/upload', filename)
+        # file.save(file_path)
+        # send_file(os.path.join('upload', filename), mimetype='image')
 
-        return filename
+        # ReverseImage.get(self,file.stream.read())
+        
+        # files={"file": request.files["file"]}
 
-@api_rest.route('/reverse-image/<string:path>')
+        return ReverseImage.get(self, file.read())
+
+@api_rest.route('/reverse-image/<string:img>')
 class ReverseImage(SecureResource):
     """ Unsecure Resource Class: Inherit from Resource """
 
-    def get(self, path):
-        results = best_match_uploaded_img('app/upload/'+path)
+    def get(self, img):
+        results = best_match_uploaded_img(img)
+
+        print(results)
 
         annotations = results.web_detection
 

@@ -36,16 +36,13 @@ def best_match_uri(uri):
 
     return result
 
-def best_match_uploaded_img(path):
+def best_match_uploaded_img(img):
     """Detects web annotations given an image."""
     from google.cloud import vision
     import io
     client = vision.ImageAnnotatorClient()
 
-    with io.open(path, 'rb') as image_file:
-        content = image_file.read()
-
-    image = vision.Image(content=content)
+    image = vision.Image(content=img)
 
     response = client.web_detection(image=image)
 
