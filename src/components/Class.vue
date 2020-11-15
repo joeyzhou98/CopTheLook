@@ -1,43 +1,34 @@
 <template>
   <v-col cols="12">
-    <v-card
-      :color="color"
-    >
-      <div class="d-flex flex-no-wrap justify-space-between">
-        <div>
-          <v-card-title
-              class="headline"
-              v-text="this.className"
-          ></v-card-title>
+    <v-hover v-slot="{ hover }">
+      <v-card
+        :color="color"
+        @click="show = !show && urls.length > 0"
+        :elevation="hover ? 12 : 2"
+        :class="{ 'on-hover': hover, 'show': show }"
+      >
+        <div class="d-flex flex-no-wrap justify-space-between">
+          <div>
+            <v-card-title
+                class="headline"
+                v-text="className"
+            ></v-card-title>
 
-          <v-card-subtitle v-text="'Found ' + this.urls.length + ' links'"></v-card-subtitle>
+            <v-card-subtitle v-text="'Found ' + urls.length + ' links'"></v-card-subtitle>
+          </div>
 
-          <v-card-actions>
-            <v-btn
-              @click="show = !show"
-              v-if="this.urls.length > 0"
-              class="ml-2 mt-5"
-              outlined
-              rounded
-              small
-            >
-              See links
-            </v-btn>
-          </v-card-actions>
+          <v-avatar
+              class="ma-3"
+              size="125"
+              tile
+          >
+            <v-img contain :src="'api/' + imgName"></v-img>
+          </v-avatar>
         </div>
+      </v-card>
+    </v-hover>
 
-        <v-avatar
-            class="ma-3"
-            size="125"
-            tile
-        >
-          <v-img :src="'api/' + this.imgName"></v-img>
-        </v-avatar>
-
-      </div>
-
-    </v-card>
-    <v-expand-transition v-if="this.urls.length > 0">
+    <v-expand-transition v-if="urls.length > 0">
         <div v-show="show">
           <v-card-text>
             <v-list dense>
@@ -88,3 +79,12 @@ export default {
   }
 }
 </script>
+
+<style>
+.v-card {
+  transition: opacity .4s ease-in-out;
+}
+.v-card:not(.on-hover):not(.show) {
+  opacity: 0.8;
+ }
+</style>

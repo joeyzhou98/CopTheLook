@@ -5,7 +5,6 @@ import numpy as np
 import pandas as pd
 import requests
 from PIL import Image
-import imgaug as ia
 from vision_script import *
 
 # Mapping of class ids with class names
@@ -138,10 +137,10 @@ def get_image_from_url(img_url):
 def display_image(img, segmap):
     img = np.array(img)
     segmap = np.array(segmap)
-    ia_seg_map = ia.SegmentationMapOnImage(segmap, shape=img.shape, nb_classes=47)
-    colors = ia_seg_map.DEFAULT_SEGMENT_COLORS + ia_seg_map.DEFAULT_SEGMENT_COLORS[1:6]
-    result = ia_seg_map.draw_on_image(img, colors=colors)
-    return Image.fromarray(result[0])
+    # ia_seg_map = ia.SegmentationMapOnImage(segmap, shape=img.shape, nb_classes=47)
+    # colors = ia_seg_map.DEFAULT_SEGMENT_COLORS + ia_seg_map.DEFAULT_SEGMENT_COLORS[1:6]
+    # result = ia_seg_map.draw_on_image(img, colors=colors)
+    # return Image.fromarray(result[0])
 
 
 def get_cropped_segments(img):
@@ -151,7 +150,6 @@ def get_cropped_segments(img):
     # img_url = "https://upload.wikimedia.org/wikipedia/commons/5/5a/Batik_Fashion_01.jpg" 
     # img = get_image_from_url(img_url)
     segmap, id_to_class = segmenter.predict_on_image(img)
-    display_image(img, segmap)
 
     segmap = np.array(segmap)
     img_array = np.array(img)

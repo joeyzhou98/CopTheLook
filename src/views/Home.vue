@@ -9,6 +9,15 @@
 
       <v-tooltip bottom>
         <template data-app v-slot:activator="{ on, attrs }">
+          <v-btn v-bind="attrs" v-on="on" icon @click="reset">
+            <v-icon>mdi-restart</v-icon>
+          </v-btn>
+        </template>
+        <span>Reset search</span>
+      </v-tooltip>
+
+      <v-tooltip bottom>
+        <template data-app v-slot:activator="{ on, attrs }">
           <v-btn v-bind="attrs" v-on="on" icon @click="changeTheme">
             <v-icon>mdi-invert-colors</v-icon>
           </v-btn>
@@ -25,10 +34,31 @@
         <span>View source</span>
       </v-tooltip>
     </v-toolbar>
+
+    <div class="text-center ma-2">
+      <v-snackbar
+        v-model="snackbar"
+        color="red darken-2"
+      >
+        {{ error }}
+
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            color="blue"
+            text
+            v-bind="attrs"
+            @click="snackbar = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+    </div>
+
     <div>
       <v-row justify="center">
         <v-col cols="12" sm="8">
-          <v-card :dark="isDark" :loading="loading" elevation="16" max-width="800" class="mx-auto">
+          <v-card v-if="notSearched" :dark="isDark" :loading="loading" elevation="16" max-width="800" class="mx-auto">
             <v-card-title>
               <span class="headline" :class="{'black--text': !isDark, 'white--text': isDark}">What kind of style would you like to explore today?</span>
               <v-spacer></v-spacer>
@@ -55,6 +85,14 @@
               ></VueFileAgent>
             </div>
           </v-card>
+
+          <v-img
+            v-else
+            contain
+            :src="'api/' + mainPicture"
+            max-height="600"
+          >
+          </v-img>
 
           <v-container>
             <v-row dense>
@@ -96,7 +134,9 @@ export default {
       files: [],
       submitBtnDisabled: true,
       particlesKey: 0,
-      loading: false
+      loading: false,
+      notSearched: true,
+      snackbar: false
     }
   },
   methods: {
@@ -125,9 +165,12 @@ export default {
           const data = response.data
           this.mainPicture = data.main_img_name
           this.segments = data.segments
+          this.notSearched = false
         })
         .catch(function (error) {
           this.error = error.message
+          this.loading = false
+          this.snackbar = true
         })
       this.loading = false
     },
@@ -137,6 +180,15 @@ export default {
     },
     fileSelected () {
       this.submitBtnDisabled = false
+    },
+    reset () {
+      this.mainPicture = ''
+      this.segments = []
+      this.files = []
+      this.submitBtnDisabled = true
+      this.loading = false
+      this.notSearched = true
+      this.snackbar = false
     }
   },
   mounted () {
@@ -145,7 +197,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #tsparticles {
   height: 100%;
   width: 100%;
