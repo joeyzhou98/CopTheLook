@@ -3,7 +3,7 @@
     <v-toolbar :dark="isDark">
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-      <v-toolbar-title>ShopTheLook</v-toolbar-title>
+      <v-toolbar-title>CopTheLook</v-toolbar-title>
 
       <v-spacer></v-spacer>
 

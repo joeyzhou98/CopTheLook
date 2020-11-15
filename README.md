@@ -1,9 +1,9 @@
-# ShopTheLook 🌶️✌
+# CopTheLook 🌶️✌
 
 Match any outfit you want by uploading a picture of the outfit and we will return links where you can potentially buy the individual clothings
 
 ## Demo
-[Live Demo](https://shopthelook0.herokuapp.com/)
+[Live Demo](https://copthelook.herokuapp.com/)
 
 ## Installation
 
@@ -22,7 +22,7 @@ Before getting started, you should have the following installed and running:
 * Clone this repository:
 
 	```
-	$ git clone https://github.com/joeyzhou98/ShopTheLook.git
+	$ git clone https://github.com/joeyzhou98/CopTheLook.git
 	```
 
 * Setup virtual environment, install dependencies, and activate it:
